@@ -1,0 +1,64 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Deduplicate header and add subtitle in Header component",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Remove duplicate Header rendering so only one sticky header is shown (no duplication on Home page).",
+      "acceptanceCriteria": [
+        "When viewing the non-admin user experience, only one header bar is visible at the top (no duplicate 'Campus Cafeteria' headers).",
+        "No other parts of the page layout are changed beyond removing the duplicate header instance."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Conditionally render the shared <Header /> only for admin mode (or otherwise remove the extra instance) so the user (HomePage) flow has exactly one top sticky header and HomePage no longer ends up with a duplicated header."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Keep the existing HomePage-owned <Header /> (with its proceed-to-payment wiring) as the single header for the non-admin experience, relying on the App-level change to prevent duplication."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Add a smaller light-gray subtitle line 'JSPM Canteen' directly under 'Campus Cafeteria' in the header title block with clean spacing.",
+      "acceptanceCriteria": [
+        "The header shows 'Campus Cafeteria' as the main title and 'JSPM Canteen' immediately beneath it.",
+        "The subtitle is smaller than the title and uses a light gray color.",
+        "Spacing between the title and subtitle is clean and visually consistent (no crowding or excessive gap)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "modify",
+          "description": "Update the title block to render the exact subtitle text 'JSPM Canteen' directly below 'Campus Cafeteria', styled smaller than the title with a light gray color and tidy vertical spacing; do not modify other header layout or behavior."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Preserve right-aligned Login/Logout button in the single header and ensure cart/login interactions (including proceed-to-payment from cart drawer) still work after de-duplication.",
+      "acceptanceCriteria": [
+        "The Login/Logout button remains right-aligned in the header (same row as before).",
+        "Proceed-to-payment from the cart drawer still navigates the user to the payment flow as it did before the header de-duplication.",
+        "No additional layout changes are introduced outside of the header de-duplication and subtitle update."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "modify",
+          "description": "Ensure header action area layout remains right-aligned (keep existing flex/justify behavior) and verify the CartDrawer proceed-to-payment callback wiring remains intact after any title/subtitle adjustments."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "After de-duplicating header rendering, confirm that the remaining header instance in the user flow is the one that receives HomePage's proceed-to-payment callback so cart->payment navigation continues working unchanged."
+        }
+      ]
+    }
+  ]
+}

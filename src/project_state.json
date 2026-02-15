@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "New project",
+  "architectural_notes": [
+    "Header component should render only once at the top; title \"Campus Cafeteria\" with smaller light-gray subtitle \"JSPM Canteen\" below, and Login button right-aligned."
+  ],
+  "known_issues": [
+    "Duplicate \"Campus Cafeteria\" header is appearing; should be removed so only one header is rendered."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-ensure-the-app-renders-exactly-one-top-header-across-the-user-flow-by-removing-the-duplicate-header-rendering-so-only-a-single-sticky-header-appears-at-the-top-the-header-must-not-be-duplicated-on-the-home-page",
+      "title": "Ensure the app renders exactly one top header across the user flow by removing the duplicate Header rendering so only a single sticky header appears at the top (the header must not be duplicated on the Home page).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-header-title-block-so-that-directly-below-the-main-title-campus-cafeteria-there-is-a-smaller-subtitle-line-with-the-exact-text-jspm-canteen-styled-in-light-gray-with-clean-vertical-spacing-between-title-and-subtitle-the-subtitle-must-be-visually-smaller-than-the-main-title",
+      "title": "Update the Header title block so that directly below the main title \"Campus Cafeteria\" there is a smaller subtitle line with the exact text \"JSPM Canteen\" styled in light gray, with clean vertical spacing between title and subtitle; the subtitle must be visually smaller than the main title.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-keep-the-authentication-button-login-logout-aligned-to-the-right-within-the-single-header-and-ensure-existing-cart-login-interactions-still-work-after-removing-the-duplicate-header-including-proceeding-to-payment-from-the-cart-drawer",
+      "title": "Keep the authentication button (Login/Logout) aligned to the right within the single header, and ensure existing cart/login interactions still work after removing the duplicate header (including proceeding to payment from the cart drawer).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Update header to a single top header: remove duplicate \"Campus Cafeteria\", add light-gray smaller subtitle \"JSPM Canteen\" with clean spacing, keep Login button right-aligned",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Deduplicate top header and add subtitle under Campus Cafeteria",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

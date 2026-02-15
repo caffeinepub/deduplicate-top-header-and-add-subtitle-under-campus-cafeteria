@@ -1,0 +1,63 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-15T18:47:03.611Z",
+  "summary": "REQ-2 (subtitle) appears implemented in Header.tsx, but the diff does not satisfy the core requirement of having exactly one (and still present) top header in the non-admin user flow. App.tsx now conditionally renders the Header only in admin mode, which likely removes the header entirely for normal users rather than de-duplicating it. The diff also introduces additional UI (admin toggle floating button) and modifies an explicitly immutable hook file.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Ensure the app renders exactly one top header across the user flow by removing the duplicate Header rendering so only a single sticky header appears at the top (the header must not be duplicated on the Home page).",
+      "reason": "App.tsx now renders <Header /> only when isAdmin is true, which likely removes the header for the non-admin (HomePage) user experience instead of ensuring a single header there. The diff does not show removal of a duplicate header instance on the Home page; it shows gating the header by admin mode.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Keep the authentication button (Login/Logout) aligned to the right within the single header, and ensure existing cart/login interactions still work after removing the duplicate header (including proceeding to payment from the cart drawer).",
+      "reason": "Because the header is conditionally rendered only for admin mode in App.tsx, the non-admin user flow may have no header at all, which would break/omit the Login/Logout control and cart interactions in the primary user experience. The diff summary is truncated for CartDrawer usage, so end-to-end proceed-to-payment behavior after de-duplication cannot be confirmed.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Header.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Conditionally rendering the Header only for admin mode (effectively hiding the header for non-admin users).",
+      "reason": "The BuildRequest requires de-duplicating the header so exactly one header appears across the user flow (including Home/non-admin), not removing it from non-admin entirely.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "description": "Added a floating fixed-position Admin/User mode toggle button (Shield icon) and related localStorage admin-mode logic + forced reload.",
+      "reason": "Not requested; also conflicts with the constraint to not change anything else in the layout besides removing the duplicate header instance and updating the header subtitle.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "description": "Modified an explicitly immutable file path: frontend/src/hooks/useInternetIdentity.ts.",
+      "reason": "BuildRequest constraints state this file must not be modified.",
+      "evidence": [
+        "frontend/src/hooks/useInternetIdentity.ts"
+      ]
+    },
+    {
+      "description": "Added project_state.json tracking/metadata file.",
+      "reason": "Not requested by the BuildRequest.",
+      "evidence": [
+        "project_state.json"
+      ]
+    }
+  ],
+  "confidence": 0.82,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/App.tsx",
+    "frontend/src/components/Header.tsx",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "project_state.json"
+  ]
+}

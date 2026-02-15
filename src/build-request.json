@@ -1,0 +1,75 @@
+{
+  "kind": "build_request",
+  "title": "Deduplicate top header and add subtitle under Campus Cafeteria",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Ensure the app renders exactly one top header across the user flow by removing the duplicate Header rendering so only a single sticky header appears at the top (the header must not be duplicated on the Home page).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "user-msg-1"
+        ],
+        "quotes": [
+          "Keep ONLY ONE header at the top.\nRemove any duplicate \"Campus Cafeteria\" header.\nDo not duplicate the header component"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When viewing the non-admin user experience, only one header bar is visible at the top (no duplicate 'Campus Cafeteria' headers).",
+        "No other parts of the page layout are changed beyond removing the duplicate header instance."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update the Header title block so that directly below the main title \"Campus Cafeteria\" there is a smaller subtitle line with the exact text \"JSPM Canteen\" styled in light gray, with clean vertical spacing between title and subtitle; the subtitle must be visually smaller than the main title.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "user-msg-1"
+        ],
+        "quotes": [
+          "Below \"Campus Cafeteria\", add a smaller subtitle text:\n   \"JSPM Canteen\"\n\nDesign requirements:\n- Subtitle should be smaller than the main title\n- Light gray color\n- Clean spacing between title and subtitle"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The header shows 'Campus Cafeteria' as the main title and 'JSPM Canteen' immediately beneath it.",
+        "The subtitle is smaller than the title and uses a light gray color.",
+        "Spacing between the title and subtitle is clean and visually consistent (no crowding or excessive gap)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Keep the authentication button (Login/Logout) aligned to the right within the single header, and ensure existing cart/login interactions still work after removing the duplicate header (including proceeding to payment from the cart drawer).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "user-msg-1"
+        ],
+        "quotes": [
+          "Keep the Login button aligned to the right",
+          "Do not change anything else in the layout."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Login/Logout button remains right-aligned in the header (same row as before).",
+        "Proceed-to-payment from the cart drawer still navigates the user to the payment flow as it did before the header de-duplication.",
+        "No additional layout changes are introduced outside of the header de-duplication and subtitle update."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under frontend/src/components/ui (read-only components must be composed, not modified).",
+    "Do not modify frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, or frontend/src/main.tsx (immutable paths).",
+    "Do not change anything else in the layout besides: (1) removing the duplicate header instance and (2) updating the header subtitle as specified."
+  ],
+  "nonGoals": [
+    "Changing the main title text \"Campus Cafeteria\".",
+    "Redesigning the page layout, footer, tabs, or other sections.",
+    "Adding new pages or new authentication providers."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
