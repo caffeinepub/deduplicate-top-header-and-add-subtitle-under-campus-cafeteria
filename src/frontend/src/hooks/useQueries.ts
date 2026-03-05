@@ -1,41 +1,45 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { FoodItem, UserProfile } from '../backend';
-import { toast } from 'sonner';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import type { FoodItem, UserProfile } from "../backend";
 import {
-  initializeDemoData,
+  type CartItem,
+  addToCart,
+  clearCart,
+  getCartItems,
+  removeCartItem,
+  subscribeToCartUpdates,
+  updateCartItemQuantity,
+} from "../lib/cartStorage";
+import {
+  type DemoOrderType,
+  addDemoFoodItem,
+  deleteDemoFoodItem,
   getDemoMenuItems,
   getDemoOrders,
+  initializeDemoData,
   placeDemoOrder,
+  subscribeToOrderUpdates,
+  updateDemoFoodItem,
   updateDemoOrderStatus,
   updateDemoPaymentStatus,
-  addDemoFoodItem,
-  updateDemoFoodItem,
-  deleteDemoFoodItem,
-  subscribeToOrderUpdates,
-  type DemoOrderType,
-} from '../lib/demoData';
-import {
-  getCartItems,
-  addToCart,
-  updateCartItemQuantity,
-  removeCartItem,
-  clearCart,
-  subscribeToCartUpdates,
-  type CartItem,
-} from '../lib/cartStorage';
-import { useEffect } from 'react';
+} from "../lib/demoData";
 
 // Initialize demo data immediately on module load
 initializeDemoData();
 
-// User Profile Queries (Demo mode)
+// User Profile Queries (Demo mode — reads name from localStorage)
 export function useGetCallerUserProfile() {
   return useQuery<UserProfile | null>({
-    queryKey: ['currentUserProfile'],
+    queryKey: ["currentUserProfile"],
     queryFn: () => {
-      return { name: 'Demo User' };
+      const storedName = localStorage.getItem("cafeteria_user_name");
+      const isLoggedIn =
+        localStorage.getItem("cafeteria_is_logged_in") === "true";
+      if (!isLoggedIn) return null;
+      return { name: storedName || "Student" };
     },
-    staleTime: Infinity,
+    staleTime: 0,
     retry: false,
   });
 }
@@ -44,12 +48,12 @@ export function useSaveCallerUserProfile() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (profile: UserProfile) => {
+    mutationFn: async (_profile: UserProfile) => {
       return Promise.resolve();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentUserProfile'] });
-      toast.success('Profile saved successfully');
+      queryClient.invalidateQueries({ queryKey: ["currentUserProfile"] });
+      toast.success("Profile saved successfully");
     },
   });
 }
@@ -57,11 +61,11 @@ export function useSaveCallerUserProfile() {
 // Admin Check (Demo mode)
 export function useIsCallerAdmin() {
   return useQuery<boolean>({
-    queryKey: ['isAdmin'],
+    queryKey: ["isAdmin"],
     queryFn: () => {
-      return localStorage.getItem('cafeteria-demo-admin') === 'true';
+      return localStorage.getItem("cafeteria-demo-admin") === "true";
     },
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
     retry: false,
   });
 }
@@ -69,23 +73,23 @@ export function useIsCallerAdmin() {
 // Food Items Queries
 export function useGetAllFoodItems() {
   return useQuery<FoodItem[]>({
-    queryKey: ['foodItems'],
+    queryKey: ["foodItems"],
     queryFn: () => {
       return getDemoMenuItems();
     },
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
     initialData: getDemoMenuItems(),
   });
 }
 
 export function useGetFoodItemsByCategory(category: string) {
   return useQuery<FoodItem[]>({
-    queryKey: ['foodItems', category],
+    queryKey: ["foodItems", category],
     queryFn: () => {
       const items = getDemoMenuItems();
       return items.filter((item) => item.category === category);
     },
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
   });
 }
 
@@ -93,15 +97,25 @@ export function useAddFoodItem() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (params: { name: string; description: string; price: bigint; category: string }) => {
-      return addDemoFoodItem(params.name, params.description, params.price, params.category);
+    mutationFn: async (params: {
+      name: string;
+      description: string;
+      price: bigint;
+      category: string;
+    }) => {
+      return addDemoFoodItem(
+        params.name,
+        params.description,
+        params.price,
+        params.category,
+      );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['foodItems'] });
-      toast.success('Food item added successfully');
+      queryClient.invalidateQueries({ queryKey: ["foodItems"] });
+      toast.success("Food item added successfully");
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to add food item');
+      toast.error(error.message || "Failed to add food item");
     },
   });
 }
@@ -110,15 +124,27 @@ export function useUpdateFoodItem() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (params: { id: string; name: string; description: string; price: bigint; category: string }) => {
-      updateDemoFoodItem(params.id, params.name, params.description, params.price, params.category);
+    mutationFn: async (params: {
+      id: string;
+      name: string;
+      description: string;
+      price: bigint;
+      category: string;
+    }) => {
+      updateDemoFoodItem(
+        params.id,
+        params.name,
+        params.description,
+        params.price,
+        params.category,
+      );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['foodItems'] });
-      toast.success('Food item updated successfully');
+      queryClient.invalidateQueries({ queryKey: ["foodItems"] });
+      toast.success("Food item updated successfully");
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to update food item');
+      toast.error(error.message || "Failed to update food item");
     },
   });
 }
@@ -131,8 +157,8 @@ export function useUpdateFoodItemImage() {
       return Promise.resolve();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['foodItems'] });
-      toast.success('Image updated (demo mode - not persisted)');
+      queryClient.invalidateQueries({ queryKey: ["foodItems"] });
+      toast.success("Image updated (demo mode - not persisted)");
     },
   });
 }
@@ -145,11 +171,11 @@ export function useDeleteFoodItem() {
       deleteDemoFoodItem(id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['foodItems'] });
-      toast.success('Food item deleted successfully');
+      queryClient.invalidateQueries({ queryKey: ["foodItems"] });
+      toast.success("Food item deleted successfully");
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to delete food item');
+      toast.error(error.message || "Failed to delete food item");
     },
   });
 }
@@ -160,14 +186,14 @@ export function useGetCart() {
 
   useEffect(() => {
     const unsubscribe = subscribeToCartUpdates(() => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     });
 
     return unsubscribe;
   }, [queryClient]);
 
   return useQuery<CartItem[]>({
-    queryKey: ['cart'],
+    queryKey: ["cart"],
     queryFn: () => {
       return getCartItems();
     },
@@ -184,11 +210,11 @@ export function useAddToCart() {
       addToCart(params.foodItem, Number(params.quantity));
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-      toast.success('Added to cart');
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Added to cart");
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to add to cart');
+      toast.error(error.message || "Failed to add to cart");
     },
   });
 }
@@ -201,10 +227,10 @@ export function useUpdateCartItemQuantity() {
       updateCartItemQuantity(params.foodItemId, Number(params.quantity));
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to update quantity');
+      toast.error(error.message || "Failed to update quantity");
     },
   });
 }
@@ -217,11 +243,11 @@ export function useRemoveFromCart() {
       removeCartItem(foodItemId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-      toast.success('Removed from cart');
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Removed from cart");
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to remove from cart');
+      toast.error(error.message || "Failed to remove from cart");
     },
   });
 }
@@ -234,7 +260,7 @@ export function useClearCart() {
       clearCart();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
 }
@@ -244,17 +270,17 @@ export function usePlaceOrder() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (paymentMethod: 'Cash' | 'UPI') => {
+    mutationFn: async (paymentMethod: "Cash" | "UPI") => {
       return placeDemoOrder(paymentMethod);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-      queryClient.invalidateQueries({ queryKey: ['userOrders'] });
-      queryClient.invalidateQueries({ queryKey: ['allOrders'] });
-      toast.success('Order placed successfully!');
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({ queryKey: ["userOrders"] });
+      queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+      toast.success("Order placed successfully!");
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to place order');
+      toast.error(error.message || "Failed to place order");
     },
   });
 }
@@ -264,14 +290,14 @@ export function useGetUserOrders() {
 
   useEffect(() => {
     const unsubscribe = subscribeToOrderUpdates(() => {
-      queryClient.invalidateQueries({ queryKey: ['userOrders'] });
+      queryClient.invalidateQueries({ queryKey: ["userOrders"] });
     });
 
     return unsubscribe;
   }, [queryClient]);
 
   return useQuery<DemoOrderType[]>({
-    queryKey: ['userOrders'],
+    queryKey: ["userOrders"],
     queryFn: () => {
       return getDemoOrders();
     },
@@ -285,14 +311,14 @@ export function useGetAllOrders() {
 
   useEffect(() => {
     const unsubscribe = subscribeToOrderUpdates(() => {
-      queryClient.invalidateQueries({ queryKey: ['allOrders'] });
+      queryClient.invalidateQueries({ queryKey: ["allOrders"] });
     });
 
     return unsubscribe;
   }, [queryClient]);
 
   return useQuery<DemoOrderType[]>({
-    queryKey: ['allOrders'],
+    queryKey: ["allOrders"],
     queryFn: () => {
       return getDemoOrders();
     },
@@ -309,12 +335,12 @@ export function useUpdateOrderStatus() {
       updateDemoOrderStatus(params.orderId, params.status as any);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allOrders'] });
-      queryClient.invalidateQueries({ queryKey: ['userOrders'] });
-      toast.success('Order status updated');
+      queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+      queryClient.invalidateQueries({ queryKey: ["userOrders"] });
+      toast.success("Order status updated");
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to update order status');
+      toast.error(error.message || "Failed to update order status");
     },
   });
 }
@@ -327,12 +353,12 @@ export function useUpdatePaymentStatus() {
       updateDemoPaymentStatus(params.orderId, params.paymentStatus as any);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['allOrders'] });
-      queryClient.invalidateQueries({ queryKey: ['userOrders'] });
-      toast.success('Payment status updated');
+      queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+      queryClient.invalidateQueries({ queryKey: ["userOrders"] });
+      toast.success("Payment status updated");
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to update payment status');
+      toast.error(error.message || "Failed to update payment status");
     },
   });
 }

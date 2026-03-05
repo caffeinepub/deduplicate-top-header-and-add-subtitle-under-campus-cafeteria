@@ -1,18 +1,32 @@
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Banknote, Smartphone, Check } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Banknote, Check, Smartphone } from "lucide-react";
+import { useState } from "react";
 
 interface PaymentMethodDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onConfirm: (method: 'Cash' | 'UPI') => void;
+  onConfirm: (method: "Cash" | "UPI") => void;
   isLoading?: boolean;
 }
 
-export default function PaymentMethodDialog({ open, onOpenChange, onConfirm, isLoading }: PaymentMethodDialogProps) {
-  const [selectedMethod, setSelectedMethod] = useState<'Cash' | 'UPI' | null>(null);
+export default function PaymentMethodDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+  isLoading,
+}: PaymentMethodDialogProps) {
+  const [selectedMethod, setSelectedMethod] = useState<"Cash" | "UPI" | null>(
+    null,
+  );
 
   const handleConfirm = () => {
     if (selectedMethod) {
@@ -33,21 +47,27 @@ export default function PaymentMethodDialog({ open, onOpenChange, onConfirm, isL
         <div className="grid gap-4 py-4">
           <Card
             className={`cursor-pointer border-2 p-4 transition-all hover:shadow-md ${
-              selectedMethod === 'Cash'
-                ? 'border-orange-500 bg-orange-50'
-                : 'border-gray-200 hover:border-orange-300'
+              selectedMethod === "Cash"
+                ? "border-orange-500 bg-orange-50"
+                : "border-gray-200 hover:border-orange-300"
             }`}
-            onClick={() => setSelectedMethod('Cash')}
+            onClick={() => setSelectedMethod("Cash")}
           >
             <div className="flex items-center gap-4">
-              <div className={`rounded-full p-3 ${selectedMethod === 'Cash' ? 'bg-orange-500' : 'bg-gray-100'}`}>
-                <Banknote className={`h-6 w-6 ${selectedMethod === 'Cash' ? 'text-white' : 'text-gray-600'}`} />
+              <div
+                className={`rounded-full p-3 ${selectedMethod === "Cash" ? "bg-orange-500" : "bg-gray-100"}`}
+              >
+                <Banknote
+                  className={`h-6 w-6 ${selectedMethod === "Cash" ? "text-white" : "text-gray-600"}`}
+                />
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold">Cash</h3>
-                <p className="text-sm text-muted-foreground">Pay with cash at pickup</p>
+                <p className="text-sm text-muted-foreground">
+                  Pay with cash at pickup
+                </p>
               </div>
-              {selectedMethod === 'Cash' && (
+              {selectedMethod === "Cash" && (
                 <Check className="h-5 w-5 text-orange-500" />
               )}
             </div>
@@ -55,21 +75,27 @@ export default function PaymentMethodDialog({ open, onOpenChange, onConfirm, isL
 
           <Card
             className={`cursor-pointer border-2 p-4 transition-all hover:shadow-md ${
-              selectedMethod === 'UPI'
-                ? 'border-orange-500 bg-orange-50'
-                : 'border-gray-200 hover:border-orange-300'
+              selectedMethod === "UPI"
+                ? "border-orange-500 bg-orange-50"
+                : "border-gray-200 hover:border-orange-300"
             }`}
-            onClick={() => setSelectedMethod('UPI')}
+            onClick={() => setSelectedMethod("UPI")}
           >
             <div className="flex items-center gap-4">
-              <div className={`rounded-full p-3 ${selectedMethod === 'UPI' ? 'bg-orange-500' : 'bg-gray-100'}`}>
-                <Smartphone className={`h-6 w-6 ${selectedMethod === 'UPI' ? 'text-white' : 'text-gray-600'}`} />
+              <div
+                className={`rounded-full p-3 ${selectedMethod === "UPI" ? "bg-orange-500" : "bg-gray-100"}`}
+              >
+                <Smartphone
+                  className={`h-6 w-6 ${selectedMethod === "UPI" ? "text-white" : "text-gray-600"}`}
+                />
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold">UPI</h3>
-                <p className="text-sm text-muted-foreground">Pay online via UPI</p>
+                <p className="text-sm text-muted-foreground">
+                  Pay online via UPI
+                </p>
               </div>
-              {selectedMethod === 'UPI' && (
+              {selectedMethod === "UPI" && (
                 <Check className="h-5 w-5 text-orange-500" />
               )}
             </div>
@@ -89,7 +115,7 @@ export default function PaymentMethodDialog({ open, onOpenChange, onConfirm, isL
             disabled={!selectedMethod || isLoading}
             className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
           >
-            {isLoading ? 'Processing...' : 'Confirm Order'}
+            {isLoading ? "Processing..." : "Confirm Order"}
           </Button>
         </DialogFooter>
       </DialogContent>

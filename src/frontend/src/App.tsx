@@ -1,34 +1,34 @@
-import { useState, useEffect } from 'react';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from 'next-themes';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import AdminDashboard from './pages/AdminDashboard';
-import InstallPrompt from './components/InstallPrompt';
-import OfflineIndicator from './components/OfflineIndicator';
-import { Button } from '@/components/ui/button';
-import { Shield } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+import { Shield } from "lucide-react";
+import { ThemeProvider } from "next-themes";
+import { useEffect, useState } from "react";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import InstallPrompt from "./components/InstallPrompt";
+import OfflineIndicator from "./components/OfflineIndicator";
+import AdminDashboard from "./pages/AdminDashboard";
+import HomePage from "./pages/HomePage";
 
 export default function App() {
   // Use synchronous localStorage check for immediate rendering
   const [isAdmin, setIsAdmin] = useState(() => {
-    return localStorage.getItem('cafeteria-demo-admin') === 'true';
+    return localStorage.getItem("cafeteria-demo-admin") === "true";
   });
 
   // Listen for storage changes (in case admin mode is toggled in another tab)
   useEffect(() => {
     const handleStorageChange = () => {
-      setIsAdmin(localStorage.getItem('cafeteria-demo-admin') === 'true');
+      setIsAdmin(localStorage.getItem("cafeteria-demo-admin") === "true");
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const toggleAdminMode = () => {
     const newMode = !isAdmin;
-    localStorage.setItem('cafeteria-demo-admin', newMode.toString());
+    localStorage.setItem("cafeteria-demo-admin", newMode.toString());
     setIsAdmin(newMode);
     // Force re-render of child components
     window.location.reload();
@@ -43,7 +43,7 @@ export default function App() {
           {isAdmin ? <AdminDashboard /> : <HomePage />}
         </main>
         <Footer />
-        
+
         <Button
           onClick={toggleAdminMode}
           className="fixed bottom-20 right-4 rounded-full shadow-lg"
@@ -52,7 +52,7 @@ export default function App() {
         >
           <Shield className="h-5 w-5" />
         </Button>
-        
+
         <InstallPrompt />
         <Toaster />
       </div>

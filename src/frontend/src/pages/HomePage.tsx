@@ -1,24 +1,30 @@
-import { useState } from 'react';
-import { useGetAllFoodItems, useGetUserOrders } from '../hooks/useQueries';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import FoodItemCard from '../components/FoodItemCard';
-import OrdersSection from '../components/OrdersSection';
-import PaymentPage from '../components/PaymentPage';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { UtensilsCrossed, ClipboardList } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ClipboardList, UtensilsCrossed } from "lucide-react";
+import { useState } from "react";
+import FoodItemCard from "../components/FoodItemCard";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import OrdersSection from "../components/OrdersSection";
+import PaymentPage from "../components/PaymentPage";
+import { useGetAllFoodItems, useGetUserOrders } from "../hooks/useQueries";
 
 export default function HomePage() {
   const { data: foodItems = [] } = useGetAllFoodItems();
   const { data: orders = [] } = useGetUserOrders();
   const [showPaymentPage, setShowPaymentPage] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<string>("menu");
 
-  const categories = ['all', ...Array.from(new Set(foodItems.map((item) => item.category)))];
+  const categories = [
+    "all",
+    ...Array.from(new Set(foodItems.map((item) => item.category))),
+  ];
 
   const filteredItems =
-    selectedCategory === 'all' ? foodItems : foodItems.filter((item) => item.category === selectedCategory);
+    selectedCategory === "all"
+      ? foodItems
+      : foodItems.filter((item) => item.category === selectedCategory);
 
   const handleProceedToPayment = () => {
     setShowPaymentPage(true);
@@ -32,8 +38,19 @@ export default function HomePage() {
     setShowPaymentPage(false);
   };
 
+  const handleViewOrders = () => {
+    setShowPaymentPage(false);
+    setActiveTab("orders");
+  };
+
   if (showPaymentPage) {
-    return <PaymentPage onBack={handlePaymentBack} onSuccess={handlePaymentSuccess} />;
+    return (
+      <PaymentPage
+        onBack={handlePaymentBack}
+        onSuccess={handlePaymentSuccess}
+        onViewOrders={handleViewOrders}
+      />
+    );
   }
 
   return (
@@ -42,7 +59,11 @@ export default function HomePage() {
 
       <main className="flex-1 bg-gradient-to-b from-orange-50 to-amber-50 p-4 pb-24">
         <div className="mx-auto max-w-7xl">
-          <Tabs defaultValue="menu" className="w-full">
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
             <TabsList className="mb-6 grid w-full max-w-md grid-cols-2">
               <TabsTrigger value="menu" className="flex items-center gap-2">
                 <UtensilsCrossed className="h-4 w-4" />
@@ -59,15 +80,17 @@ export default function HomePage() {
                 {categories.map((category) => (
                   <Button
                     key={category}
-                    variant={selectedCategory === category ? 'default' : 'outline'}
+                    variant={
+                      selectedCategory === category ? "default" : "outline"
+                    }
                     onClick={() => setSelectedCategory(category)}
                     className={
                       selectedCategory === category
-                        ? 'bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600'
-                        : ''
+                        ? "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                        : ""
                     }
                   >
-                    {category === 'all' ? 'All Items' : category}
+                    {category === "all" ? "All Items" : category}
                   </Button>
                 ))}
               </div>

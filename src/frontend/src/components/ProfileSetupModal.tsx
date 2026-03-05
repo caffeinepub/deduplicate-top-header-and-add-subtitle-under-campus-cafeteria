@@ -1,12 +1,18 @@
-import { useState } from 'react';
-import { useSaveCallerUserProfile } from '../hooks/useQueries';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { useSaveCallerUserProfile } from "../hooks/useQueries";
 
 export default function ProfileSetupModal() {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const saveProfile = useSaveCallerUserProfile();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -18,10 +24,15 @@ export default function ProfileSetupModal() {
 
   return (
     <Dialog open={true}>
-      <DialogContent className="sm:max-w-md" onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent
+        className="sm:max-w-md"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Welcome to Campus Cafeteria! 🍽️</DialogTitle>
-          <DialogDescription>Please tell us your name to get started.</DialogDescription>
+          <DialogDescription>
+            Please tell us your name to get started.
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -39,7 +50,7 @@ export default function ProfileSetupModal() {
             className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
             disabled={!name.trim() || saveProfile.isPending}
           >
-            {saveProfile.isPending ? 'Saving...' : 'Continue'}
+            {saveProfile.isPending ? "Saving..." : "Continue"}
           </Button>
         </form>
       </DialogContent>
