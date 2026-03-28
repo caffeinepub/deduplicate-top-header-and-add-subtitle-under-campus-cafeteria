@@ -19,9 +19,10 @@ import ProfileScreen from "./ProfileScreen";
 
 interface HeaderProps {
   onProceedToPayment?: () => void;
+  onLogout?: () => void;
 }
 
-export default function Header({ onProceedToPayment }: HeaderProps) {
+export default function Header({ onProceedToPayment, onLogout }: HeaderProps) {
   const { userName, isLoggedIn, login } = useUserName();
   const { data: cartItems = [] } = useGetCart();
   const queryClient = useQueryClient();
@@ -33,7 +34,6 @@ export default function Header({ onProceedToPayment }: HeaderProps) {
 
   const cartItemCount = cartItems.length;
 
-  // Load custom logo on mount and subscribe to updates
   useEffect(() => {
     setLogoUrl(getCustomLogo());
     const unsubscribe = subscribeToLogoUpdates((newLogoUrl) => {
@@ -52,13 +52,11 @@ export default function Header({ onProceedToPayment }: HeaderProps) {
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     login(nameInput);
-    // Invalidate so header/profile immediately reflect new name
     queryClient.invalidateQueries({ queryKey: ["currentUserProfile"] });
     setShowLoginDialog(false);
     setNameInput("");
   };
 
-  // Use custom logo if available, otherwise use default
   const displayLogoUrl =
     logoUrl || "/assets/generated/app-logo.dim_256x256.png";
 
@@ -85,7 +83,6 @@ export default function Header({ onProceedToPayment }: HeaderProps) {
           <div className="flex items-center gap-2">
             {isLoggedIn && (
               <>
-                {/* Cart Button */}
                 <Button
                   data-ocid="header.cart.button"
                   variant="ghost"
@@ -101,7 +98,6 @@ export default function Header({ onProceedToPayment }: HeaderProps) {
                   )}
                 </Button>
 
-                {/* Profile Button */}
                 <Button
                   data-ocid="header.profile.button"
                   variant="ghost"
@@ -142,7 +138,6 @@ export default function Header({ onProceedToPayment }: HeaderProps) {
             </DialogDescription>
           </DialogHeader>
 
-          {/* Social login buttons */}
           <div className="space-y-2 pt-2">
             <Button
               data-ocid="login.google.button"
@@ -157,7 +152,6 @@ export default function Header({ onProceedToPayment }: HeaderProps) {
                 setShowLoginDialog(false);
               }}
             >
-              {/* Google "G" SVG */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 488 512"
@@ -197,7 +191,6 @@ export default function Header({ onProceedToPayment }: HeaderProps) {
                 setShowLoginDialog(false);
               }}
             >
-              {/* Apple logo SVG */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 814 1000"
@@ -248,7 +241,11 @@ export default function Header({ onProceedToPayment }: HeaderProps) {
         onProceedToPayment={handleProceedToPayment}
       />
 
-      <ProfileScreen open={showProfile} onOpenChange={setShowProfile} />
+      <ProfileScreen
+        open={showProfile}
+        onOpenChange={setShowProfile}
+        onLogout={onLogout}
+      />
     </>
   );
 }

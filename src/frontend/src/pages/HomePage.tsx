@@ -9,7 +9,11 @@ import OrdersSection from "../components/OrdersSection";
 import PaymentPage from "../components/PaymentPage";
 import { useGetAllFoodItems, useGetUserOrders } from "../hooks/useQueries";
 
-export default function HomePage() {
+interface HomePageProps {
+  onLogout?: () => void;
+}
+
+export default function HomePage({ onLogout }: HomePageProps) {
   const { data: foodItems = [] } = useGetAllFoodItems();
   const { data: orders = [] } = useGetUserOrders();
   const [showPaymentPage, setShowPaymentPage] = useState(false);
@@ -26,18 +30,9 @@ export default function HomePage() {
       ? foodItems
       : foodItems.filter((item) => item.category === selectedCategory);
 
-  const handleProceedToPayment = () => {
-    setShowPaymentPage(true);
-  };
-
-  const handlePaymentBack = () => {
-    setShowPaymentPage(false);
-  };
-
-  const handlePaymentSuccess = () => {
-    setShowPaymentPage(false);
-  };
-
+  const handleProceedToPayment = () => setShowPaymentPage(true);
+  const handlePaymentBack = () => setShowPaymentPage(false);
+  const handlePaymentSuccess = () => setShowPaymentPage(false);
   const handleViewOrders = () => {
     setShowPaymentPage(false);
     setActiveTab("orders");
@@ -55,7 +50,7 @@ export default function HomePage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header onProceedToPayment={handleProceedToPayment} />
+      <Header onProceedToPayment={handleProceedToPayment} onLogout={onLogout} />
 
       <main className="flex-1 bg-gradient-to-b from-orange-50 to-amber-50 p-4 pb-24">
         <div className="mx-auto max-w-7xl">

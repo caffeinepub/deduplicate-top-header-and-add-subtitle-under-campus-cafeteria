@@ -18,11 +18,13 @@ import { useUserName } from "../hooks/useUserName";
 interface ProfileScreenProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onLogout?: () => void;
 }
 
 export default function ProfileScreen({
   open,
   onOpenChange,
+  onLogout,
 }: ProfileScreenProps) {
   const { userName, logout } = useUserName();
   const { data: orders = [] } = useGetUserOrders();
@@ -42,6 +44,10 @@ export default function ProfileScreen({
     onOpenChange(false);
     logout();
     queryClient.invalidateQueries({ queryKey: ["currentUserProfile"] });
+    // Navigate back to landing page if callback provided
+    if (onLogout) {
+      onLogout();
+    }
   };
 
   return (
@@ -81,14 +87,12 @@ export default function ProfileScreen({
         </SheetHeader>
 
         <div className="p-6 space-y-6">
-          {/* Profile Info */}
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
               Profile Information
             </h3>
             <Card className="border border-orange-100">
               <CardContent className="p-0 divide-y divide-orange-50">
-                {/* Name */}
                 <div className="flex items-center gap-3 px-4 py-3.5">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100">
                     <User className="h-4 w-4 text-orange-600" />
@@ -101,7 +105,6 @@ export default function ProfileScreen({
                   </div>
                 </div>
 
-                {/* Email */}
                 <div className="flex items-center gap-3 px-4 py-3.5">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100">
                     <Mail className="h-4 w-4 text-orange-600" />
@@ -114,7 +117,6 @@ export default function ProfileScreen({
                   </div>
                 </div>
 
-                {/* Student ID */}
                 <div className="flex items-center gap-3 px-4 py-3.5">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100">
                     <IdCard className="h-4 w-4 text-orange-600" />
@@ -130,7 +132,6 @@ export default function ProfileScreen({
 
           <Separator />
 
-          {/* Order History */}
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
               Order History
@@ -162,7 +163,6 @@ export default function ProfileScreen({
 
           <Separator />
 
-          {/* App Info */}
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
               App Info
@@ -183,7 +183,6 @@ export default function ProfileScreen({
             </Card>
           </div>
 
-          {/* Logout Button */}
           <Button
             data-ocid="profile.logout.button"
             variant="outline"
