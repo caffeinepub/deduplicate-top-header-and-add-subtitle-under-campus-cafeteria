@@ -9,7 +9,6 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
-import { useState } from "react";
 import {
   useGetCart,
   useRemoveFromCart,
@@ -72,12 +71,12 @@ export default function CartDrawer({
                   return (
                     <div
                       key={item.id}
-                      className="flex gap-4 rounded-lg border bg-card p-4"
+                      className="flex gap-4 rounded-xl glass border-white/40 p-4"
                     >
                       <img
                         src={imageUrl}
                         alt={item.name}
-                        className="h-20 w-20 rounded-lg object-cover"
+                        className="h-20 w-20 rounded-xl object-cover"
                       />
                       <div className="flex flex-1 flex-col">
                         <h4 className="font-semibold">{item.name}</h4>
@@ -88,7 +87,7 @@ export default function CartDrawer({
                           <Button
                             size="icon"
                             variant="outline"
-                            className="h-7 w-7"
+                            className="h-7 w-7 rounded-full"
                             onClick={() =>
                               updateQuantity.mutate({
                                 foodItemId: item.id,
@@ -106,7 +105,7 @@ export default function CartDrawer({
                           <Button
                             size="icon"
                             variant="outline"
-                            className="h-7 w-7"
+                            className="h-7 w-7 rounded-full"
                             onClick={() =>
                               updateQuantity.mutate({
                                 foodItemId: item.id,
@@ -139,7 +138,7 @@ export default function CartDrawer({
                 <span className="text-orange-600">₹{totalPrice}</span>
               </div>
               <Button
-                className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                className="w-full rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-md hover:shadow-lg transition-all duration-200"
                 size="lg"
                 onClick={handleProceedToPayment}
               >

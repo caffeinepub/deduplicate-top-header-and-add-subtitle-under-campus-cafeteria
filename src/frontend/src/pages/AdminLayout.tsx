@@ -53,7 +53,7 @@ function SidebarContent({
   return (
     <div className="flex h-full flex-col">
       {/* Sidebar header */}
-      <div className="border-b border-orange-100 px-6 py-6">
+      <div className="border-b border-white/30 px-6 py-6">
         <h2 className="font-display text-xl font-bold text-gray-900">
           Campus Cafeteria
         </h2>
@@ -76,10 +76,10 @@ function SidebarContent({
                 setActivePage(item.id);
                 onNavClick?.();
               }}
-              className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all ${
+              className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
                 isActive
                   ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md"
-                  : "text-gray-600 hover:bg-orange-50 hover:text-orange-700"
+                  : "text-gray-600 hover:bg-white/50 hover:text-orange-700"
               }`}
             >
               <Icon className="h-5 w-5 flex-shrink-0" />
@@ -90,12 +90,12 @@ function SidebarContent({
       </nav>
 
       {/* Logout */}
-      <div className="border-t border-orange-100 px-3 py-4">
+      <div className="border-t border-white/30 px-3 py-4">
         <button
           type="button"
           data-ocid="admin.sidebar.logout.button"
           onClick={onLogout}
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-500 transition-all hover:bg-red-50 hover:text-red-600"
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-500 transition-all hover:bg-red-50/60 hover:text-red-600"
         >
           <LogOut className="h-5 w-5" />
           Logout
@@ -126,9 +126,16 @@ export default function AdminLayout({ onLogout }: AdminLayoutProps) {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div
+      className="flex min-h-screen"
+      style={{
+        background:
+          "linear-gradient(135deg, #fef3c7 0%, #fff7ed 40%, #fef9ee 70%, #fde68a 100%)",
+        backgroundAttachment: "fixed",
+      }}
+    >
       {/* Desktop sidebar */}
-      <aside className="hidden w-64 flex-shrink-0 flex-col border-r border-orange-100 bg-white shadow-sm lg:flex">
+      <aside className="hidden w-64 flex-shrink-0 flex-col glass-strong border-r border-white/30 shadow-xl lg:flex">
         <SidebarContent
           activePage={activePage}
           setActivePage={setActivePage}
@@ -151,7 +158,7 @@ export default function AdminLayout({ onLogout }: AdminLayoutProps) {
       {/* Main content area */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile top bar */}
-        <header className="flex items-center justify-between border-b border-orange-100 bg-white px-4 py-3 shadow-sm lg:hidden">
+        <header className="flex items-center justify-between glass-strong border-b border-white/30 px-4 py-3 shadow-sm lg:hidden">
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">

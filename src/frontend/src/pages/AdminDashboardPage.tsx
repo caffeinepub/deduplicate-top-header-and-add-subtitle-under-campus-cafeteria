@@ -23,35 +23,35 @@ export default function AdminDashboardPage() {
       value: totalOrders,
       icon: Package,
       color: "text-gray-700",
-      bg: "bg-gray-100",
+      bg: "bg-gray-100/70",
     },
     {
       label: "Pending Orders",
       value: pendingOrders,
       icon: Clock,
       color: "text-yellow-700",
-      bg: "bg-yellow-50",
+      bg: "bg-yellow-50/80",
     },
     {
       label: "Preparing",
       value: preparingOrders,
       icon: ChefHat,
       color: "text-blue-700",
-      bg: "bg-blue-50",
+      bg: "bg-blue-50/80",
     },
     {
       label: "Ready",
       value: readyOrders,
       icon: CheckCircle2,
       color: "text-green-700",
-      bg: "bg-green-50",
+      bg: "bg-green-50/80",
     },
     {
       label: "Total Revenue",
       value: `₹${totalRevenue}`,
       icon: IndianRupee,
       color: "text-orange-700",
-      bg: "bg-orange-50",
+      bg: "bg-orange-50/80",
     },
   ];
 
@@ -68,12 +68,15 @@ export default function AdminDashboardPage() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.label} className="border-0 shadow-sm bg-white">
+            <Card
+              key={stat.label}
+              className="glass border-white/40 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-200 rounded-2xl"
+            >
               <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4">
                 <CardTitle className="text-xs font-medium text-gray-500">
                   {stat.label}
                 </CardTitle>
-                <div className={`rounded-lg p-2 ${stat.bg}`}>
+                <div className={`rounded-xl p-2 ${stat.bg}`}>
                   <Icon className={`h-4 w-4 ${stat.color}`} />
                 </div>
               </CardHeader>
@@ -88,7 +91,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent orders summary */}
-      <Card className="border-0 shadow-sm bg-white">
+      <Card className="glass border-white/40 shadow-lg rounded-2xl">
         <CardHeader>
           <CardTitle className="text-base">Recent Orders</CardTitle>
         </CardHeader>
@@ -100,7 +103,7 @@ export default function AdminDashboardPage() {
               {orders.slice(0, 5).map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-3 text-sm"
+                  className="flex items-center justify-between rounded-xl glass border border-white/30 px-4 py-3 text-sm"
                 >
                   <div>
                     <span className="font-medium text-gray-800">

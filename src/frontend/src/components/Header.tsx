@@ -62,7 +62,7 @@ export default function Header({ onProceedToPayment, onLogout }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-orange-200/50 bg-white/80 backdrop-blur-lg">
+      <header className="sticky top-0 z-50 glass-strong border-b border-white/30 shadow-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center">
@@ -102,7 +102,7 @@ export default function Header({ onProceedToPayment, onLogout }: HeaderProps) {
                   data-ocid="header.profile.button"
                   variant="ghost"
                   size="sm"
-                  className="flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 hover:bg-orange-100"
+                  className="flex items-center gap-1.5 rounded-full bg-white/50 backdrop-blur-sm px-3 py-1.5 hover:bg-white/70 border border-white/40"
                   onClick={() => setShowProfile(true)}
                 >
                   <User className="h-4 w-4 text-orange-600" />
@@ -118,7 +118,7 @@ export default function Header({ onProceedToPayment, onLogout }: HeaderProps) {
                 data-ocid="header.login.button"
                 onClick={() => setShowLoginDialog(true)}
                 size="sm"
-                className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-md hover:shadow-lg transition-all duration-200"
               >
                 <LogIn className="mr-2 h-4 w-4" />
                 Login
@@ -227,7 +227,7 @@ export default function Header({ onProceedToPayment, onLogout }: HeaderProps) {
             <Button
               data-ocid="login.submit_button"
               type="submit"
-              className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+              className="w-full rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-md hover:shadow-lg transition-all duration-200"
             >
               Continue
             </Button>

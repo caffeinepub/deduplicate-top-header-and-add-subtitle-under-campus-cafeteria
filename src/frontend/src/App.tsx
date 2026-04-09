@@ -63,7 +63,14 @@ export default function App() {
       {view === "admin" && <AdminLayout onLogout={handleAdminLogout} />}
 
       {view === "student" && (
-        <div className="flex min-h-screen flex-col bg-gradient-to-br from-orange-50 via-white to-amber-50">
+        <div
+          className="flex min-h-screen flex-col"
+          style={{
+            background:
+              "linear-gradient(135deg, #fef3c7 0%, #fff7ed 40%, #fef9ee 70%, #fde68a 100%)",
+            backgroundAttachment: "fixed",
+          }}
+        >
           <main className="flex-1">
             <HomePage onLogout={handleStudentLogout} />
           </main>

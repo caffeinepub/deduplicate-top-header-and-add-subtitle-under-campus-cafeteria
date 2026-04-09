@@ -33,7 +33,14 @@ export default function AdminLogin({ onLogin, onBack }: AdminLoginProps) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 via-white to-amber-50 p-4">
+    <div
+      className="flex min-h-screen items-center justify-center p-4"
+      style={{
+        background:
+          "linear-gradient(135deg, #fef3c7 0%, #fff7ed 40%, #fef9ee 70%, #fde68a 100%)",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <div className="w-full max-w-md">
         {/* Back button */}
         {onBack && (
@@ -49,7 +56,13 @@ export default function AdminLogin({ onLogin, onBack }: AdminLoginProps) {
 
         {/* Logo / Brand */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 shadow-lg">
+          <div
+            className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500"
+            style={{
+              boxShadow:
+                "0 0 40px rgba(251,146,60,0.4), 0 8px 24px rgba(251,146,60,0.2)",
+            }}
+          >
             <ShieldCheck className="h-8 w-8 text-white" />
           </div>
           <h1 className="font-display text-3xl font-bold text-gray-900">
@@ -60,7 +73,7 @@ export default function AdminLogin({ onLogin, onBack }: AdminLoginProps) {
           </p>
         </div>
 
-        <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
+        <Card className="glass-strong border-white/40 shadow-2xl rounded-2xl">
           <CardHeader className="pb-2">
             <h2 className="text-lg font-semibold text-gray-800">
               Sign in to continue
@@ -98,7 +111,7 @@ export default function AdminLogin({ onLogin, onBack }: AdminLoginProps) {
 
               {error && (
                 <div
-                  className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600"
+                  className="rounded-xl bg-red-50/80 px-4 py-3 text-sm text-red-600 border border-red-100"
                   data-ocid="admin.login.error_state"
                 >
                   {error}
@@ -109,7 +122,7 @@ export default function AdminLogin({ onLogin, onBack }: AdminLoginProps) {
                 type="submit"
                 disabled={loading}
                 data-ocid="admin.login.submit_button"
-                className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-md"
+                className="w-full rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200"
               >
                 {loading ? "Signing in..." : "Sign In"}
               </Button>

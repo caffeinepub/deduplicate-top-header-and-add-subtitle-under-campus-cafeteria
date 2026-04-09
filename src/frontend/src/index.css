@@ -63,5 +63,49 @@
   }
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(
+      135deg,
+      #fef3c7 0%,
+      #fff7ed 40%,
+      #fef9ee 70%,
+      #fde68a 100%
+    );
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+}
+
+/* ===== Glassmorphism utilities ===== */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-dark {
+  background: rgba(30, 20, 10, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass {
+    background: rgba(255, 255, 255, 0.92);
+  }
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.96);
+  }
+  .glass-dark {
+    background: rgba(30, 20, 10, 0.85);
   }
 }

@@ -33,7 +33,7 @@ export default function FoodItemCard({ item }: FoodItemCardProps) {
   return (
     <>
       <Card
-        className="group cursor-pointer overflow-hidden transition-all hover:shadow-lg"
+        className="glass group cursor-pointer overflow-hidden border-white/40 shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 rounded-2xl"
         onClick={() => setShowDetails(true)}
       >
         <div className="relative aspect-square overflow-hidden bg-muted">
@@ -58,7 +58,7 @@ export default function FoodItemCard({ item }: FoodItemCardProps) {
           </span>
           <Button
             size="sm"
-            className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+            className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-md hover:shadow-lg transition-all duration-200"
             onClick={(e) => {
               e.stopPropagation();
               setShowDetails(true);
@@ -79,13 +79,13 @@ export default function FoodItemCard({ item }: FoodItemCardProps) {
             <img
               src={imageUrl}
               alt={item.name}
-              className="h-64 w-full rounded-lg object-cover"
+              className="h-64 w-full rounded-xl object-cover"
             />
             <div>
               <Badge className="mb-2">{item.category}</Badge>
               <p className="text-muted-foreground">{item.description}</p>
             </div>
-            <div className="flex items-center justify-between rounded-lg bg-muted p-4">
+            <div className="flex items-center justify-between rounded-xl bg-orange-50/70 p-4 border border-orange-100/60">
               <span className="text-lg font-semibold">Price</span>
               <span className="text-2xl font-bold text-orange-600">
                 ₹{Number(item.price)}
@@ -97,6 +97,7 @@ export default function FoodItemCard({ item }: FoodItemCardProps) {
                 <Button
                   size="icon"
                   variant="outline"
+                  className="rounded-full"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 >
                   <Minus className="h-4 w-4" />
@@ -107,6 +108,7 @@ export default function FoodItemCard({ item }: FoodItemCardProps) {
                 <Button
                   size="icon"
                   variant="outline"
+                  className="rounded-full"
                   onClick={() => setQuantity(quantity + 1)}
                 >
                   <Plus className="h-4 w-4" />
@@ -114,7 +116,7 @@ export default function FoodItemCard({ item }: FoodItemCardProps) {
               </div>
             </div>
             <Button
-              className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+              className="w-full rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-md hover:shadow-lg transition-all duration-200"
               size="lg"
               onClick={handleAddToCart}
               disabled={addToCart.isPending}

@@ -61,7 +61,7 @@ export default function AdminOrdersPage() {
       {orders.length === 0 ? (
         <div
           data-ocid="admin.orders.empty_state"
-          className="flex min-h-[400px] items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white"
+          className="flex min-h-[400px] items-center justify-center rounded-2xl glass border-white/30 border-2 border-dashed"
         >
           <div className="text-center">
             <Package className="mx-auto h-14 w-14 text-muted-foreground/40" />
@@ -74,10 +74,10 @@ export default function AdminOrdersPage() {
           </div>
         </div>
       ) : (
-        <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+        <div className="rounded-2xl glass border-white/40 shadow-lg overflow-hidden">
           <Table data-ocid="admin.orders.table">
             <TableHeader>
-              <TableRow className="bg-gray-50 hover:bg-gray-50">
+              <TableRow className="bg-white/30 hover:bg-white/30">
                 <TableHead className="font-semibold text-gray-700">
                   Order ID
                 </TableHead>
@@ -99,68 +99,65 @@ export default function AdminOrdersPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders.map((order, idx) => {
-                const itemNames = order.items
-                  .map((i) => i.foodItem.name)
-                  .join(", ");
-                const totalQty = order.items.reduce(
-                  (s, i) => s + Number(i.quantity),
-                  0,
-                );
-                const ocid =
-                  idx < 3
-                    ? (`admin.orders.row.${idx + 1}` as const)
-                    : undefined;
-                return (
-                  <TableRow key={order.id} data-ocid={ocid}>
-                    <TableCell className="font-mono text-xs text-gray-600">
-                      #{order.id.slice(0, 8)}
-                    </TableCell>
-                    <TableCell className="max-w-[180px] truncate text-sm">
-                      {itemNames}
-                    </TableCell>
-                    <TableCell className="text-sm">{totalQty}</TableCell>
-                    <TableCell>
-                      <span className="text-sm">{order.paymentMethod}</span>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={STATUS_BADGE[order.status] ?? ""}>
-                        {order.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {order.status === "Pending" && (
+              {orders.map((order, idx) => (
+                <TableRow
+                  key={order.id}
+                  data-ocid={`admin.orders.row.item.${idx + 1}`}
+                  className="hover:bg-white/20 transition-colors"
+                >
+                  <TableCell className="font-mono text-xs text-gray-600">
+                    #{order.id.slice(0, 8)}
+                  </TableCell>
+                  <TableCell className="max-w-[180px]">
+                    <div className="space-y-0.5">
+                      {order.items.map((item) => (
+                        <p
+                          key={item.foodItem.id}
+                          className="text-sm font-medium"
+                        >
+                          {item.foodItem.name}
+                        </p>
+                      ))}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {order.items.reduce(
+                      (sum, item) => sum + Number(item.quantity),
+                      0,
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="text-xs bg-white/50">
+                      {order.paymentMethod}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        STATUS_BADGE[order.status] ||
+                        "bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    {order.status !== "Ready" &&
+                      order.status !== "Completed" && (
                         <Button
                           size="sm"
                           variant="outline"
-                          className="text-xs border-blue-300 text-blue-700 hover:bg-blue-50"
+                          className="rounded-full text-xs bg-white/50 hover:bg-white/80 border-white/50 transition-all duration-200"
                           onClick={() => handleAdvanceStatus(order)}
                         >
-                          Mark Preparing
+                          {order.status === "Pending"
+                            ? "Start Preparing"
+                            : "Mark Ready"}
                         </Button>
                       )}
-                      {order.status === "Preparing" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="text-xs border-green-300 text-green-700 hover:bg-green-50"
-                          onClick={() => handleAdvanceStatus(order)}
-                        >
-                          Mark Ready
-                        </Button>
-                      )}
-                      {order.status === "Ready" && (
-                        <Badge className="bg-gray-100 text-gray-600 text-xs">
-                          Completed
-                        </Badge>
-                      )}
-                      {order.status === "Completed" && (
-                        <span className="text-xs text-gray-400">Done</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>

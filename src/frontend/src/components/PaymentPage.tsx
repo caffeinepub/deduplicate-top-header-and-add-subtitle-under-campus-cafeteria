@@ -116,7 +116,7 @@ export default function PaymentPage({
         <p className="mt-4 text-lg font-medium text-muted-foreground">
           Your cart is empty
         </p>
-        <Button onClick={onBack} className="mt-4">
+        <Button onClick={onBack} className="mt-4 rounded-full">
           Back to Menu
         </Button>
       </div>
@@ -125,18 +125,30 @@ export default function PaymentPage({
 
   // Payment Selection Screen
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50 p-4 pb-24">
+    <div
+      className="min-h-screen p-4 pb-24"
+      style={{
+        background:
+          "linear-gradient(135deg, #fef3c7 0%, #fff7ed 40%, #fef9ee 70%, #fde68a 100%)",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <div className="mx-auto max-w-2xl space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={onBack}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full"
+            onClick={onBack}
+          >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-2xl font-bold">Payment & Order Summary</h1>
+          <h1 className="text-2xl font-bold">Payment &amp; Order Summary</h1>
         </div>
 
         {/* Order Items */}
-        <Card>
+        <Card className="glass border-white/40 shadow-lg rounded-2xl">
           <CardHeader>
             <CardTitle>Order Items</CardTitle>
           </CardHeader>
@@ -147,26 +159,28 @@ export default function PaymentPage({
                   const imageUrl =
                     DEMO_IMAGE_MAP[item.id] || "/assets/placeholder.jpg";
                   const subtotal = item.price * item.quantity;
-
                   return (
                     <div
                       key={item.id}
-                      className="flex items-center gap-4 rounded-lg border bg-white p-3"
+                      className="flex items-center gap-3 rounded-xl glass border-white/30 p-3"
                     >
                       <img
                         src={imageUrl}
                         alt={item.name}
-                        className="h-16 w-16 rounded-lg object-cover"
+                        className="h-14 w-14 rounded-xl object-cover"
                       />
                       <div className="flex-1">
-                        <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="font-medium text-sm">{item.name}</p>
+                        <p className="text-xs text-muted-foreground">
                           ₹{item.price} × {item.quantity}
                         </p>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold">₹{subtotal}</p>
-                      </div>
+                      <Badge
+                        variant="secondary"
+                        className="bg-orange-100/70 text-orange-700"
+                      >
+                        ₹{subtotal}
+                      </Badge>
                     </div>
                   );
                 })}
@@ -175,44 +189,43 @@ export default function PaymentPage({
           </CardContent>
         </Card>
 
-        {/* Total Amount */}
-        <Card className="border-2 border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50">
+        {/* Total */}
+        <Card className="glass border-orange-200/40 shadow-lg rounded-2xl">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total Amount</p>
-                <p className="text-3xl font-bold text-orange-600">
-                  ₹{totalPrice}
-                </p>
-              </div>
-              <Badge variant="outline" className="text-lg">
-                {cartItems.length} {cartItems.length === 1 ? "item" : "items"}
-              </Badge>
+              <span className="text-lg font-semibold">Total Amount</span>
+              <span className="text-2xl font-bold text-orange-600">
+                ₹{totalPrice}
+              </span>
             </div>
           </CardContent>
         </Card>
 
-        {/* Payment Method Selection */}
-        <Card>
+        {/* Payment Method */}
+        <Card className="glass border-white/40 shadow-lg rounded-2xl">
           <CardHeader>
-            <CardTitle>Select Payment Method</CardTitle>
+            <CardTitle>Payment Method</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <button
               type="button"
-              className={`w-full text-left cursor-pointer rounded-lg border-2 p-4 transition-all hover:shadow-md ${
+              className={`w-full text-left cursor-pointer rounded-xl border-2 p-4 transition-all duration-200 ${
                 selectedMethod === "Cash"
-                  ? "border-orange-500 bg-orange-50 shadow-md"
-                  : "border-gray-200 hover:border-orange-300"
+                  ? "border-orange-400/60 bg-orange-500/10 shadow-[0_0_20px_rgba(251,146,60,0.3)]"
+                  : "border-white/40 bg-white/30 hover:border-orange-300/50 hover:shadow-md"
               }`}
               onClick={() => setSelectedMethod("Cash")}
             >
               <div className="flex items-center gap-4">
                 <div
-                  className={`rounded-full p-3 ${selectedMethod === "Cash" ? "bg-orange-500" : "bg-gray-100"}`}
+                  className={`rounded-full p-3 ${
+                    selectedMethod === "Cash" ? "bg-orange-500" : "bg-white/60"
+                  }`}
                 >
                   <Banknote
-                    className={`h-6 w-6 ${selectedMethod === "Cash" ? "text-white" : "text-gray-600"}`}
+                    className={`h-6 w-6 ${
+                      selectedMethod === "Cash" ? "text-white" : "text-gray-600"
+                    }`}
                   />
                 </div>
                 <div className="flex-1">
@@ -229,19 +242,23 @@ export default function PaymentPage({
 
             <button
               type="button"
-              className={`w-full text-left cursor-pointer rounded-lg border-2 p-4 transition-all hover:shadow-md ${
+              className={`w-full text-left cursor-pointer rounded-xl border-2 p-4 transition-all duration-200 ${
                 selectedMethod === "UPI"
-                  ? "border-orange-500 bg-orange-50 shadow-md"
-                  : "border-gray-200 hover:border-orange-300"
+                  ? "border-orange-400/60 bg-orange-500/10 shadow-[0_0_20px_rgba(251,146,60,0.3)]"
+                  : "border-white/40 bg-white/30 hover:border-orange-300/50 hover:shadow-md"
               }`}
               onClick={() => setSelectedMethod("UPI")}
             >
               <div className="flex items-center gap-4">
                 <div
-                  className={`rounded-full p-3 ${selectedMethod === "UPI" ? "bg-orange-500" : "bg-gray-100"}`}
+                  className={`rounded-full p-3 ${
+                    selectedMethod === "UPI" ? "bg-orange-500" : "bg-white/60"
+                  }`}
                 >
                   <Smartphone
-                    className={`h-6 w-6 ${selectedMethod === "UPI" ? "text-white" : "text-gray-600"}`}
+                    className={`h-6 w-6 ${
+                      selectedMethod === "UPI" ? "text-white" : "text-gray-600"
+                    }`}
                   />
                 </div>
                 <div className="flex-1">
@@ -259,10 +276,10 @@ export default function PaymentPage({
         </Card>
 
         {/* Payment Status Info */}
-        <Card className="border-yellow-200 bg-yellow-50">
+        <Card className="glass border-yellow-200/50 shadow-lg rounded-2xl">
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <div className="rounded-full bg-yellow-100 p-2">
+              <div className="rounded-full bg-yellow-100/70 p-2">
                 <Banknote className="h-5 w-5 text-yellow-600" />
               </div>
               <div className="flex-1">
@@ -281,10 +298,10 @@ export default function PaymentPage({
         <Separator />
 
         {/* Confirm Button */}
-        <div className="fixed bottom-0 left-0 right-0 border-t bg-white p-4 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 glass-strong border-t border-white/30 p-4 shadow-2xl">
           <div className="mx-auto max-w-2xl">
             <Button
-              className="w-full bg-gradient-to-r from-orange-500 to-amber-500 py-6 text-lg hover:from-orange-600 hover:to-amber-600"
+              className="w-full rounded-full bg-gradient-to-r from-orange-500 to-amber-500 py-6 text-lg hover:from-orange-600 hover:to-amber-600 shadow-md hover:shadow-xl transition-all duration-200"
               size="lg"
               onClick={handleConfirmOrder}
               disabled={!selectedMethod || placeOrder.isPending}
